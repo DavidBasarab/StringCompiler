@@ -1,7 +1,4 @@
 ﻿using System;
-using System.CodeDom.Compiler;
-using System.Text;
-using Microsoft.CSharp;
 
 namespace Tester
 {
@@ -31,6 +28,14 @@ namespace Tester
                        + @" 
 
             }
+
+            public static int Sum(int x, int y)
+            {
+            " +
+                       "return x + y;"
+                       + @" 
+
+            }
         }
     }
 ";
@@ -39,18 +44,20 @@ namespace Tester
 
             var success = stringCompiler.Compile(code);
 
-            if (!success)
-            {
-                foreach (var compilerError in stringCompiler.GetErrors())
-                {
-                    Console.WriteLine(compilerError.FormattedError);
-                }
-            }
+            if (!success) PrintErrorsToConsole(stringCompiler);
             else
             {
                 stringCompiler.RunMethod("First.Program", "Main", "Chopped");
                 stringCompiler.RunMethod("First.Program", "Main2");
+                var result = stringCompiler.RunMethod("First.Program", "Sum", 7, 3);
+
+                Console.WriteLine("The Result of Sum is {0}", result);
             }
+        }
+
+        private static void PrintErrorsToConsole(StringCompiler.Library.StringCompiler stringCompiler)
+        {
+            foreach (var compilerError in stringCompiler.GetErrors()) Console.WriteLine(compilerError.FormattedError);
         }
     }
 }
