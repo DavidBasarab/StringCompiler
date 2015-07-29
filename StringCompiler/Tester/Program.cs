@@ -16,11 +16,20 @@ namespace Tester
     {
         public class Program
         {
-            public static void Main()
+            public static void Main(string someText)
             {
             " +
-                       "Console.WriteLine(\"Hello, world! -- I made a change\");"
-                       + @"
+                       "Console.WriteLine(\"Hello, world! -- I made a change = {0}\", someText);"
+                       + @" 
+
+            }
+
+            public static void Main2()
+            {
+            " +
+                       "Console.WriteLine(\"What is with this?\");"
+                       + @" 
+
             }
         }
     }
@@ -39,7 +48,8 @@ namespace Tester
             }
             else
             {
-                stringCompiler.RunMethod("First.Program", "Main");
+                stringCompiler.RunMethod("First.Program", "Main", "Chopped");
+                stringCompiler.RunMethod("First.Program", "Main2");
             }
         }
     }

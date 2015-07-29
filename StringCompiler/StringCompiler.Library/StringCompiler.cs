@@ -44,7 +44,7 @@ namespace StringCompiler.Library
             return NoCompileErrors ? new List<CompilerError>() : (from SystemCompilerError systemError in _compileResults.Errors select new CompilerError(systemError)).ToList();
         }
 
-        public void RunMethod(string typeName, string methodName)
+        public void RunMethod(string typeName, string methodName, params object[] args)
         {
             if (CompileErrors) return;
 
@@ -52,7 +52,7 @@ namespace StringCompiler.Library
 
             var method = program.GetMethod(methodName);
 
-            method.Invoke(null, null);
+            method.Invoke(null, args);
         }
     }
 }
