@@ -1,6 +1,8 @@
-﻿using System.CodeDom.Compiler;
+﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.CSharp;
 using SystemCompilerError = System.CodeDom.Compiler.CompilerError;
 
@@ -48,11 +50,32 @@ namespace StringCompiler.Library
         {
             if (CompileErrors) return null;
 
-            var program = _compileResults.CompiledAssembly.GetType(typeName);
+            var program = GetProgram(typeName);
 
             var method = program.GetMethod(methodName);
 
             return method.Invoke(null, args);
+        }
+
+        public object RunMethod(string typeName, int methodNumber, object[] args)
+        {
+            if (CompileErrors) return null;
+
+            var method = GetMethods(typeName)[methodNumber];
+
+            return method.Invoke(null, args);
+        }
+
+        private MethodInfo[] GetMethods(string typeName)
+        {
+            var program = _compileResults.CompiledAssembly.GetType(typeName);
+
+            return program.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+        }
+
+        private Type GetProgram(string typeName)
+        {
+            return _compileResults.CompiledAssembly.GetType(typeName);
         }
     }
 }

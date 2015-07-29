@@ -40,8 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompilerError.cs" />
+    <Compile Include="MethodComplier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringCompiler.cs" />
+    <Compile Include="VoidReturnMethodFragmentCompiler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
