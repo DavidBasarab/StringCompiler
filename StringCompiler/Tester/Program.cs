@@ -26,37 +26,20 @@ namespace Tester
     }
 ";
 
-            var provider = new CSharpCodeProvider();
-            var parameters = new CompilerParameters();
+            var stringCompiler = new StringCompiler.Library.StringCompiler();
 
-            // Reference to System.Drawing library
-            //parameters.ReferencedAssemblies.Add("System.Drawing.dll");
-            // True - memory generation, false - external file generation
-            parameters.GenerateInMemory = true;
-            // True - exe file generation, false - dll file generation
-            //parameters.GenerateExecutable = true;
+            var success = stringCompiler.Compile(code);
 
-            var results = provider.CompileAssemblyFromSource(parameters, code);
-
-            if (results.Errors.HasErrors)
+            if (!success)
             {
-                var sb = new StringBuilder();
-
-                foreach (CompilerError error in results.Errors)
+                foreach (var compilerError in stringCompiler.GetErrors())
                 {
-                    //sb.AppendLine(string.Format("Error ({0}): {1}", error.ErrorNumber, error.ErrorText));
-
-                    Console.WriteLine("Error ({0}): {1} | Line = {2}", error.ErrorNumber, error.ErrorText, error.Line);
+                    Console.WriteLine(compilerError.FormattedError);
                 }
-
             }
             else
             {
-                var assembly = results.CompiledAssembly;
-                var program = assembly.GetType("First.Program");
-                var main = program.GetMethod("Main");
-
-                main.Invoke(null, null);
+                stringCompiler.RunMethod("First.Program", "Main");
             }
         }
     }
